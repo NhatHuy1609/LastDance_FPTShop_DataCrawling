@@ -1,6 +1,6 @@
 from scraper.laptop_scraper import FPTShopLaptopScraper
 from scraper.phone_scraper import FPTShopPhoneScraper
-
+from scraper.monitor_scraper import FPTShopMonitorScraper
 
 def run_laptop_scraper(headless=False):
     print("\n" + "="*50)
@@ -49,6 +49,29 @@ def run_phone_scraper(headless=False):
 
     return phones
 
+def run_monitor_scraper(headless=False):
+    print("\n" + "="*50)
+    print("STARTING MONITOR SCRAPING")
+    print("="*50 + "\n")
+
+    monitor_scraper = FPTShopMonitorScraper(headless=headless)
+
+    try:
+        # Scrape dữ liệu màn hình
+        monitors = monitor_scraper.scrape_products()
+
+        # In số lượng sản phẩm đã scrape
+        print(f"Đã scrape {len(monitors)} màn hình")
+        
+        # Lưu dữ liệu vào file CSV
+        monitor_scraper.save_to_csv(monitors, "fpt_monitors.csv")
+
+    finally:
+        # Đóng WebDriver
+        monitor_scraper.close()
+
+    return monitors
+
 
 if __name__ == "__main__":
     # Cài đặt headless=True để chạy ẩn danh không hiển thị trình duyệt
@@ -59,3 +82,6 @@ if __name__ == "__main__":
 
     # Scrape phones
     phones = run_phone_scraper(headless=headless_mode)
+
+    # Scrape monitors
+    monitors = run_monitor_scraper(headless=headless_mode)
