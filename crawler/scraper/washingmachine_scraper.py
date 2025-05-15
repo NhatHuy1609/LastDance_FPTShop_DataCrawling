@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, WebDriverException
-from crawler.scraper.base.fptshop_base import FPTShopBaseScraper
+from .base.fptshop_base import FPTShopBaseScraper
 
 
 class FPTShopWashingMachineScraper(FPTShopBaseScraper):
