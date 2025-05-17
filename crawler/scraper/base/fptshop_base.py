@@ -6,7 +6,6 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from .base_scraper import FPTShopScraper
 
-
 class FPTShopBaseScraper(FPTShopScraper):
     """Base implementation for FPT Shop scrapers"""
 
