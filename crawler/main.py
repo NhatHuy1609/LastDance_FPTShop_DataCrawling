@@ -98,6 +98,29 @@ def run_gaming_gear_scraper(headless=False):
     return gaming_gears
 
 
+def run_tv_scraper(headless=False):
+    print("\n" + "="*50)
+    print("STARTING TV SCRAPING")
+    print("="*50 + "\n")
+
+    tv_scraper = FPTShopMonitorScraper(headless=headless)
+
+    try:
+        # Scrape dữ liệu màn hình
+        tvs = tv_scraper.scrape_products()
+
+        # In số lượng sản phẩm đã scrape
+        print(f"Đã scrape {len(tvs)} màn hình")
+        
+        # Lưu dữ liệu vào file CSV
+        tv_scraper.save_to_csv(tvs, "fpt_tvs.csv")
+
+    finally:
+        # Đóng WebDriver
+        tv_scraper.close()
+
+    return tvs
+  
 def run_washingmachine_scraper(headless=False):
     print("\n" + "="*50)
     print("STARTING WASHING MACHINE SCRAPING")
@@ -121,22 +144,24 @@ def run_washingmachine_scraper(headless=False):
 
     return washingmachine
 
-
 if __name__ == "__main__":
     # Cài đặt headless=True để chạy ẩn danh không hiển thị trình duyệt
     headless_mode = False
 
-    # Scrape laptops
-    laptops = run_laptop_scraper(headless=headless_mode)
+    # # Scrape laptops
+    # laptops = run_laptop_scraper(headless=headless_mode)
 
-    # Scrape phones
-    phones = run_phone_scraper(headless=headless_mode)
+    # # Scrape phones
+    # phones = run_phone_scraper(headless=headless_mode)
 
-    # Scrape monitors
-    monitors = run_monitor_scraper(headless=headless_mode)
+    # # Scrape monitors
+    # monitors = run_monitor_scraper(headless=headless_mode)
 
     # Washing Machines
     washingmachine = run_washingmachine_scraper(headless=headless_mode)
     
-    # Scrape gaming gears
-    gaming_gears = run_gaming_gear_scraper(headless=headless_mode)
+    # # Scrape gaming gears
+    # gaming_gears = run_gaming_gear_scraper(headless=headless_mode)
+
+    # Scrape TVs
+    tvs = run_tv_scraper(headless=headless_mode)
