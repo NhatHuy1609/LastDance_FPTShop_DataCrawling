@@ -19,6 +19,7 @@ namespace database_api.Infrastructure
             var connectionString = configuration.GetConnectionString("Database");
 
             services.AddScoped<IProductRepository, ProductRespository>();
+            services.AddScoped<ILaptopRepository, LaptopRepository>();
 
             services.AddDbContext<ApplicationDbContext>((sp, options) =>
             {

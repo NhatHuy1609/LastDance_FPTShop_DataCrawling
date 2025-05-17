@@ -1,0 +1,6 @@
+venv
+env/
+fpt_*.csv
+__pycache__/
+landing-zones/*
+.env
