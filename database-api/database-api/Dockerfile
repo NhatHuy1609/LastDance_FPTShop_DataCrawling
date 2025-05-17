@@ -12,10 +12,10 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["database-api/database-api.csproj", "database-api/"]
-RUN dotnet restore "./database-api/database-api.csproj"
+COPY ["database-api.csproj", "."]
+RUN dotnet restore "./database-api.csproj"
 COPY . .
-WORKDIR "/src/database-api"
+WORKDIR "/src/."
 RUN dotnet build "./database-api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
