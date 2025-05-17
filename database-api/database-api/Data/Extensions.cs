@@ -11,7 +11,7 @@ namespace database_api.Data
         {
             MigrateDatabaseAsync<TContext>(app.ApplicationServices).GetAwaiter().GetResult();
 
-            SeedDataAsync(app.ApplicationServices).GetAwaiter().GetResult();
+            //SeedDataAsync(app.ApplicationServices).GetAwaiter().GetResult();
 
             return app;
         }

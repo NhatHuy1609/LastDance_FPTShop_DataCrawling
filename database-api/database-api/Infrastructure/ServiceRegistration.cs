@@ -7,7 +7,7 @@ namespace database_api.Infrastructure
 {
     public static  class ServiceRegistration
     {
-        public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
             // Add services to the container.
 

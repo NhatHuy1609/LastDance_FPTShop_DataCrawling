@@ -6,6 +6,7 @@ namespace database_api.Controllers
 {
     [ApiController]
     [ControllerName("products")]
+    [Route("[controller]/")]
     public class ProductController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -23,23 +24,23 @@ namespace database_api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetProductsAsync()
+        public async Task<IActionResult> GetProductsAsync()
         {
-            var products = _productRepository.GetProductsAsync();
+            var products = await _productRepository.GetProductsAsync();
 
             return Ok(products);
         }
 
         [HttpGet("[controller]/{id}")]
-        public IActionResult GetProductByIdAsync(int id) 
+        public async Task<IActionResult> GetProductByIdAsync(int id) 
         {
-            var product = _productRepository.GetProductByIdAsync(id);
+            var product = await _productRepository.GetProductByIdAsync(id);
 
             return Ok(product);
         }
 
         [HttpPost]
-        public IActionResult CreateProductAsync()
+        public async Task<IActionResult> CreateProductAsync()
         {
             return Ok();
         }
