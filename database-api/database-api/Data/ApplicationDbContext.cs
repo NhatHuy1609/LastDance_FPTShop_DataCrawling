@@ -12,6 +12,7 @@ namespace database_api.Data
 
         // public DbSet<Product> Products { get; set; }
         public DbSet<Laptop> Laptops { get; set; }
+        public DbSet<GamingGear> GamingGears { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
