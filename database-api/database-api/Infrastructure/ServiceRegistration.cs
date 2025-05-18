@@ -21,6 +21,7 @@ namespace database_api.Infrastructure
             services.AddScoped<IProductRepository, ProductRespository>();
             services.AddScoped<ILaptopRepository, LaptopRepository>();
             services.AddScoped<IGamingGearRepository, GamingGearRepository>();
+            services.AddScoped<IMonitorRepository, MonitorRepository>();
 
             services.AddDbContext<ApplicationDbContext>((sp, options) =>
             {
