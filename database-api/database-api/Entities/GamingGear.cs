@@ -1,6 +1,6 @@
-namespace database_api.Entities
+﻿namespace database_api.Entities
 {
-    public class Laptop
+    public class GamingGear
     {
         public int Id { get; set; }
         public string? Name { get; set; }
