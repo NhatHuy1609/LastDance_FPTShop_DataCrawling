@@ -26,7 +26,8 @@ services:
       - ./data-ingestion:/app
       - landing_zones_data:/landing-zones
     depends_on:
-      - database_api
+      database_api:
+        condition: service_healthy
     networks:
       - app-network
 
@@ -36,14 +37,20 @@ services:
       dockerfile: Dockerfile
     container_name: database_api
     restart: always
-    expose:
-      - 5283
-      - 7010
+    ports:
+      - 5283:5283
+      - 7010:7010
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__Database=Host=postgres;Port=5432;Database=postgres;Username=postgres;Password=postgres;Pooling=true;MaxPoolSize=50;MinPoolSize=0;
       - ASPNETCORE_Kestrel__Certificates__Default__Password=password
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5283/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     volumes:
       - ./database-api/database-api:/app
       - /app/bin

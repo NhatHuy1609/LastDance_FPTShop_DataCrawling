@@ -61,6 +61,8 @@ app.UseRouting();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.MapGet("/health", () => Results.Ok("Healthy"));
+
 app.UseCors(x => x
     .AllowAnyMethod()
     .AllowAnyHeader()
