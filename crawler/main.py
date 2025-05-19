@@ -120,7 +120,7 @@ def run_tv_scraper(headless=False):
         tv_scraper.close()
 
     return tvs
-  
+
 def run_washingmachine_scraper(headless=False):
     print("\n" + "="*50)
     print("STARTING WASHING MACHINE SCRAPING")
@@ -149,7 +149,7 @@ if __name__ == "__main__":
     headless_mode = False
 
     # # Scrape laptops
-    # laptops = run_laptop_scraper(headless=headless_mode)
+    laptops = run_laptop_scraper(headless=headless_mode)
 
     # # Scrape phones
     # phones = run_phone_scraper(headless=headless_mode)
@@ -161,7 +161,7 @@ if __name__ == "__main__":
     # washingmachine = run_washingmachine_scraper(headless=headless_mode)
     
     # # Scrape gaming gears
-    gaming_gears = run_gaming_gear_scraper(headless=headless_mode)
+    # gaming_gears = run_gaming_gear_scraper(headless=headless_mode)
 
     # Scrape TVs
-    tvs = run_tv_scraper(headless=headless_mode)
+    # tvs = run_tv_scraper(headless=headless_mode)

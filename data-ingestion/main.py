@@ -12,21 +12,27 @@ async def run_all_ingestions():
     """Chạy tất cả các tiến trình nạp dữ liệu cùng lúc"""
     # Danh sách các đối tượng nạp dữ liệu
     ingestion_tasks = [
-        # LaptopIngestion(
-        #     api_url=DATABASE_API_URL,
-        #     landing_zone_path=LANDING_ZONES_PATH,
-        #     batch_size=BATCH_SIZE
-        # ),
+        LaptopIngestion(
+        LaptopIngestion(
+            api_url=DATABASE_API_URL,
+            landing_zone_path=LANDING_ZONES_PATH,
+            batch_size=BATCH_SIZE
+        ),
         # GamingGearsIngestion(
         #     api_url=DATABASE_API_URL,
         #     landing_zone_path=LANDING_ZONES_PATH,
         #     batch_size=BATCH_SIZE
         # ),
-        MonitorIngestion(
-            api_url=DATABASE_API_URL,
-            landing_zone_path=LANDING_ZONES_PATH,
-            batch_size=BATCH_SIZE
-        )
+#         MonitorIngestion(
+#             api_url=DATABASE_API_URL,
+#             landing_zone_path=LANDING_ZONES_PATH,
+#             batch_size=BATCH_SIZE
+#         ),
+        # GamingGearsIngestion(
+        #     api_url=DATABASE_API_URL,
+        #     landing_zone_path=LANDING_ZONES_PATH,
+        #     batch_size=BATCH_SIZE
+        # )
         # Thêm các đối tượng nạp dữ liệu khác ở đây
         # PhoneIngestion(...),
         # TabletIngestion(...),
