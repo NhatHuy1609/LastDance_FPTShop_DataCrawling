@@ -5,3 +5,4 @@ export const ROUTE_PATHS = {
   washingMachine: '/washingMachine',
   television: '/tv'
 }
+
