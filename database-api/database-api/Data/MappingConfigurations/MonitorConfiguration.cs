@@ -13,7 +13,7 @@ namespace database_api.Data.MappingConfigurations
             builder.Property(m => m.ImageUrl).IsRequired().HasMaxLength(255);
             builder.Property(m => m.Price).IsRequired(false);
             builder.Property(m => m.PriceDiscount).IsRequired(false);
-            builder.Property(m => m.Category).IsRequired(false);
+            builder.Property(m => m.Category).IsRequired().HasMaxLength(50);
             builder.Property(m => m.isAvailable).IsRequired(false);
         }
     }

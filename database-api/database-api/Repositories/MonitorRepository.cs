@@ -4,6 +4,7 @@ using database_api.Interfaces;
 using database_api.Mappers;
 using database_api.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace database_api.Repositories
 {
@@ -23,10 +24,8 @@ namespace database_api.Repositories
 
         public async Task<PagedResult<Entities.Monitor>> GetAllMonitors(QueryParams queryParams)
         {
-            var monitors = _context.Monitors.AsQueryable();
-
-            // Filter by name
-            var monitorList = await _context.Monitors.ToListAsync(); // Chuyển sang list để bypass lỗi EF Core
+            // Load all monitors to perform in-memory filtering
+            var monitorList = await _context.Monitors.ToListAsync();
 
             // Xử lý tìm kiếm không dấu
             if (!string.IsNullOrEmpty(queryParams.SearchTerm))
@@ -37,65 +36,79 @@ namespace database_api.Repositories
                     .ToList();
             }
 
-            // Filter by price
+            // Filter by category - improve to handle partial matches
+            if (!string.IsNullOrEmpty(queryParams.Category))
+            {
+                var categorySearch = queryParams.Category.RemoveDiacritics().ToLower();
+                monitorList = monitorList
+                    .Where(m => m.Category.RemoveDiacritics().ToLower().Contains(categorySearch))
+                    .ToList();
+            }
+            
+            // Filter by price - only consider discount price as requested
             if (queryParams.MinPrice != null)
             {
-                monitors = monitors.Where(m => m.Price >= queryParams.MinPrice);
+                monitorList = monitorList
+                    .Where(m => m.PriceDiscount >= queryParams.MinPrice)
+                    .ToList();
             }
             if (queryParams.MaxPrice != null)
             {
-                monitors = monitors.Where(m => m.Price <= queryParams.MaxPrice);
+                monitorList = monitorList
+                    .Where(m => m.PriceDiscount <= queryParams.MaxPrice)
+                    .ToList();
             }
 
-            // Filter by discount
-            if (queryParams.MinDiscount != null)
-            {
-                monitors = monitors.Where(m => m.PriceDiscount >= queryParams.MinDiscount);
-            }
-            if (queryParams.MaxDiscount != null)
-            {
-                monitors = monitors.Where(m => m.PriceDiscount <= queryParams.MaxDiscount);
-            }
-            // Sorting
-            switch (queryParams.SortBy)
+            // Apply sorting to the filtered list
+            var sortedList = monitorList;
+            
+            switch (queryParams.SortBy?.ToLower())
             {
                 case "name":
-                    monitors = queryParams.IsDescending
-                        ? monitors.OrderByDescending(m => m.Name)
-                        : monitors.OrderBy(m => m.Name);
+                    sortedList = queryParams.IsDescending
+                        ? sortedList.OrderByDescending(m => m.Name).ToList()
+                        : sortedList.OrderBy(m => m.Name).ToList();
+                    break;
+
+                case "category":
+                    sortedList = queryParams.IsDescending
+                        ? sortedList.OrderByDescending(m => m.Category).ToList()
+                        : sortedList.OrderBy(m => m.Category).ToList();
                     break;
 
                 case "price":
-                    monitors = queryParams.IsDescending
-                        ? monitors.OrderByDescending(m => m.Price)
-                        : monitors.OrderBy(m => m.Price);
-                    break;
-
-                case "priceDiscount":
-                    monitors = queryParams.IsDescending
-                        ? monitors.OrderByDescending(m => m.PriceDiscount)
-                        : monitors.OrderBy(m => m.PriceDiscount);
+                    sortedList = queryParams.IsDescending
+                        ? sortedList.OrderByDescending(m => m.PriceDiscount).ToList()
+                        : sortedList.OrderBy(m => m.PriceDiscount).ToList();
                     break;
 
                 default:
-                    monitors = queryParams.IsDescending
-                        ? monitors.OrderByDescending(m => m.Id)
-                        : monitors.OrderBy(m => m.Id);
+                    sortedList = queryParams.IsDescending
+                        ? sortedList.OrderByDescending(m => m.Id).ToList()
+                        : sortedList.OrderBy(m => m.Id).ToList();
                     break;
             }
 
-            var items = await monitors.Skip((queryParams.PageNumber - 1) * queryParams.PageSize).Take(queryParams.PageSize).ToListAsync();
-            var totalCount = await monitors.CountAsync();
+            // Calculate pagination values
+            var totalItems = sortedList.Count;
+            var totalPages = (int)Math.Ceiling(totalItems / (double)queryParams.PageSize);
 
-            // Pagination
+            // Apply pagination
+            var pagedMonitors = sortedList
+                .Skip((queryParams.PageNumber - 1) * queryParams.PageSize)
+                .Take(queryParams.PageSize)
+                .ToList();
+
+            // Create and return paged result
             var result = new PagedResult<Entities.Monitor>
             {
-                Items = items,
-                TotalItems = totalCount,
+                Items = pagedMonitors,
+                TotalItems = totalItems,
                 PageNumber = queryParams.PageNumber,
                 PageSize = queryParams.PageSize,
-                TotalPages = (int)Math.Ceiling(totalCount / (double)queryParams.PageSize)
+                TotalPages = totalPages
             };
+
             return result;
         }
 
@@ -108,6 +121,5 @@ namespace database_api.Repositories
             }
             return monitor;
         }
-
     }
 }

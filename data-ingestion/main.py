@@ -2,6 +2,7 @@ import asyncio
 from config import LANDING_ZONES_PATH, DATABASE_API_URL, BATCH_SIZE
 from ingestion.laptop_ingestion import LaptopIngestion
 from ingestion.gaming_gears_ingestion import GamingGearsIngestion
+from ingestion.monitor_ingestion import MonitorIngestion
 
 async def run_ingestion(ingestion):
     """Chạy một tiến trình nạp dữ liệu bất đồng bộ"""
@@ -16,7 +17,12 @@ async def run_all_ingestions():
         #     landing_zone_path=LANDING_ZONES_PATH,
         #     batch_size=BATCH_SIZE
         # ),
-        GamingGearsIngestion(
+        # GamingGearsIngestion(
+        #     api_url=DATABASE_API_URL,
+        #     landing_zone_path=LANDING_ZONES_PATH,
+        #     batch_size=BATCH_SIZE
+        # ),
+        MonitorIngestion(
             api_url=DATABASE_API_URL,
             landing_zone_path=LANDING_ZONES_PATH,
             batch_size=BATCH_SIZE
