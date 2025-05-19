@@ -152,16 +152,16 @@ if __name__ == "__main__":
     laptops = run_laptop_scraper(headless=headless_mode)
 
     # # Scrape phones
-    # phones = run_phone_scraper(headless=headless_mode)
+    phones = run_phone_scraper(headless=headless_mode)
 
     # # Scrape monitors
-    # monitors = run_monitor_scraper(headless=headless_mode)
+    monitors = run_monitor_scraper(headless=headless_mode)
 
     # Washing Machines
     # washingmachine = run_washingmachine_scraper(headless=headless_mode)
     
     # # Scrape gaming gears
-    # gaming_gears = run_gaming_gear_scraper(headless=headless_mode)
+    gaming_gears = run_gaming_gear_scraper(headless=headless_mode)
 
     # Scrape TVs
-    # tvs = run_tv_scraper(headless=headless_mode)
+    tvs = run_tv_scraper(headless=headless_mode)

@@ -5,24 +5,24 @@ namespace database_api.Dtos.GamingGear
     public class CreateGamingGearDto
     {
         [Required]
-        public string Name { get; set; } = string.Empty;
-
+        public string Name { get; set; }
+        
         [Required]
-        public string Url { get; set; } = string.Empty;
-
+        public string Url { get; set; }
+        
         [Required]
-        public string ImageUrl { get; set; } = string.Empty;
-
+        public string ImageUrl { get; set; }
+        
+        [Required]
         [Range(0, double.MaxValue)]
         public double Price { get; set; }
-
+        
         [Range(0, double.MaxValue)]
         public double PriceDiscount { get; set; }
-
+        
         [Required]
-        [MaxLength(50)]
-        public string Category { get; set; } = string.Empty;
-
-        public bool IsAvailable { get; set; } = true;
+        public string Category { get; set; }
+        
+        public bool? IsAvailable { get; set; }
     }
 }

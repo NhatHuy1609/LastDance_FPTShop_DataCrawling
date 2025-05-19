@@ -5,10 +5,16 @@ namespace database_api.Interfaces
 {
     public interface IGamingGearRepository
     {
-        Task<PaginatedResult<GamingGear>> GetGamingGearsAsync(int limit, string? cursor);
-        Task<PagedResult<GamingGear>> GetGamingGearsPagedAsync(int pageNumber, int pageSize);
-        Task<PagedResult<GamingGear>> SearchGamingGearsAsync(string? keyword, string? category, double? minPrice, double? maxPrice, bool? isAvailable, int pageNumberint,int pageSize);
-        Task<GamingGear?> GetGamingGearByIdAsync(int id);
+        Task<PaginatedResult<GamingGear>> GetGamingGearsAsync(
+            int limit, 
+            string? cursor, 
+            string? name = null,
+            string? category = null,
+            double? minPrice = null,
+            double? maxPrice = null,
+            string? sortBy = null,
+            bool isDescending = false);
+        Task<GamingGear> GetGamingGearByIdAsync(int id);
         Task<GamingGear> AddGamingGearAsync(GamingGear gamingGear);
     }
 }
