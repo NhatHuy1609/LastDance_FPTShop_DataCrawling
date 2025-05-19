@@ -3,12 +3,12 @@
     public class GamingGear
     {
         public int Id { get; set; }
-        public string? Name { get; set; }
-        public string? Url { get; set; }
-        public string? ImageUrl { get; set; }
-        public double Price { get; set; }
-        public double PriceDiscount { get; set; }
-        public string? Category { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Url { get; set; } = string.Empty;
+        public string ImageUrl { get; set; } = string.Empty;
+        public double? Price { get; set; }
+        public double? PriceDiscount { get; set; }
+        public string Category { get; set; } = string.Empty;
         public string? isAvailable { get; set; }
     }
 }

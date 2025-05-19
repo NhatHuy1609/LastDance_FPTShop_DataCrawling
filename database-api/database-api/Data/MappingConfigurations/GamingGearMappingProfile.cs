@@ -9,8 +9,12 @@ namespace database_api.Data.MappingConfigurations
     {
         public GamingGearMappingProfile()
         {
-            CreateMap<GamingGear, GamingGearDto>();
-            CreateMap<CreateGamingGearDto, GamingGear>();
+            CreateMap<GamingGear, GamingGearDto>()
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price ?? 0))
+                .ForMember(dest => dest.PriceDiscount, opt => opt.MapFrom(src => src.PriceDiscount ?? 0));
+
+            CreateMap<CreateGamingGearDto, GamingGear>()
+                .ForMember(dest => dest.isAvailable, opt => opt.MapFrom(src => src.IsAvailable.ToString() ?? "true"));
 
             CreateMap<PaginatedResult<GamingGear>, PaginatedResult<GamingGearDto>>()
                 .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));

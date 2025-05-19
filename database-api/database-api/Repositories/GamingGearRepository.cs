@@ -15,6 +15,97 @@ namespace database_api.Repositories
             _dbContext = dbContext;
         }
 
+        public async Task<PaginatedResult<GamingGear>> GetGamingGearsAsync(
+            int limit, 
+            string? cursor, 
+            string? name = null,
+            string? category = null,
+            double? minPrice = null,
+            double? maxPrice = null,
+            string? sortBy = null,
+            bool isDescending = false)
+        {
+            var query = _dbContext.GamingGears.AsQueryable();
+
+            // Apply filters
+            if (!string.IsNullOrEmpty(name))
+            {
+                var search = name.ToLower();
+                query = query.Where(g => g.Name.ToLower().Contains(search));
+            }
+
+            if (!string.IsNullOrEmpty(category))
+            {
+                var categorySearch = category.ToLower();
+                query = query.Where(g => g.Category.ToLower().Contains(categorySearch));
+            }
+
+            if (minPrice.HasValue)
+            {
+                query = query.Where(g => g.PriceDiscount >= minPrice.Value);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                query = query.Where(g => g.PriceDiscount <= maxPrice.Value);
+            }
+
+            // Apply cursor pagination
+            if (!string.IsNullOrEmpty(cursor))
+            {
+                var cursorId = int.Parse(cursor);
+                query = query.Where(g => g.Id > cursorId);
+            }
+
+            // Apply sorting
+            IOrderedQueryable<GamingGear> orderedQuery;
+            
+            switch (sortBy?.ToLower())
+            {
+                case "name":
+                    orderedQuery = isDescending 
+                        ? query.OrderByDescending(g => g.Name) 
+                        : query.OrderBy(g => g.Name);
+                    break;
+                case "category":
+                    orderedQuery = isDescending 
+                        ? query.OrderByDescending(g => g.Category) 
+                        : query.OrderBy(g => g.Category);
+                    break;
+                case "price":
+                    orderedQuery = isDescending 
+                        ? query.OrderByDescending(g => g.PriceDiscount) 
+                        : query.OrderBy(g => g.PriceDiscount);
+                    break;
+                default:
+                    orderedQuery = isDescending 
+                        ? query.OrderByDescending(g => g.Id) 
+                        : query.OrderBy(g => g.Id);
+                    break;
+            }
+
+            // Get one extra item to determine if there are more results
+            var items = await orderedQuery
+                .Take(limit + 1)
+                .ToListAsync();
+
+            var hasMore = items.Count > limit;
+            if (hasMore)
+            {
+                items.RemoveAt(items.Count - 1);
+            }
+
+            // Use the last item's ID as the next cursor
+            var nextCursor = items.Count > 0 ? items.Last().Id.ToString() : null;
+
+            return new PaginatedResult<GamingGear>
+            {
+                Items = items,
+                NextCursor = nextCursor,
+                HasMore = hasMore
+            };
+        }
+
         public async Task<GamingGear> AddGamingGearAsync(GamingGear gamingGear)
         {
             await _dbContext.GamingGears.AddAsync(gamingGear);
@@ -22,50 +113,14 @@ namespace database_api.Repositories
             return gamingGear;
         }
 
-        public async Task<GamingGear?> GetGamingGearByIdAsync(int id)
+        public async Task<GamingGear> GetGamingGearByIdAsync(int id)
         {
-            return await _dbContext.GamingGears.FindAsync(id);
-        }
-
-        public async Task<PaginatedResult<GamingGear>> GetGamingGearsAsync(int limit, string? cursor)
-        {
-            int cursorId = 0;
-
-            if (!string.IsNullOrEmpty(cursor))
+            var gamingGear = await _dbContext.GamingGears.FindAsync(id);
+            if (gamingGear == null)
             {
-                int.TryParse(cursor, out cursorId);
+                throw new Exception("GamingGear not found");
             }
-
-            var query = _dbContext.GamingGears.AsQueryable();
-
-            if (cursorId > 0)
-            {
-                query = query.Where(g => g.Id > cursorId);
-            }
-
-            var gamingGears = await query.OrderBy(g => g.Id)
-                .Take(limit + 1)
-                .ToListAsync();
-
-            bool hasMore = gamingGears.Count > limit;
-
-            if (hasMore)
-            {
-                gamingGears.RemoveAt(gamingGears.Count - 1);
-            }
-
-            string? nextCursor = null;
-            if (hasMore && gamingGears.Any())
-            {
-                nextCursor = gamingGears.Last().Id.ToString();
-            }
-
-            return new PaginatedResult<GamingGear>
-            {
-                Items = gamingGears,
-                HasMore = hasMore,
-                NextCursor = nextCursor
-            };
+            return gamingGear;
         }
 
         public async Task<PagedResult<GamingGear>> GetGamingGearsPagedAsync(int pageNumber, int pageSize)
