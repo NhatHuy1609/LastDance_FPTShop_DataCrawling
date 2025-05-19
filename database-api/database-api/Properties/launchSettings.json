@@ -6,8 +6,8 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "http://localhost:5283",
-      "launchBrowser": true,
+        "applicationUrl": "http://*:5283",
+      "launchBrowser": false,
       "launchUrl": "swagger"
     },
     "https": {
@@ -16,8 +16,8 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:7010;http://localhost:5283",
-      "launchBrowser": true,
+      "applicationUrl": "https://*:7010;http://*:5283",
+      "launchBrowser": false,
       "launchUrl": "swagger"
     },
     "Container (Dockerfile)": {

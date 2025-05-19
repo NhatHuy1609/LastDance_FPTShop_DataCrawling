@@ -1,5 +1,6 @@
 using database_api.Exceptions;
 using database_api.Infrastructure;
+using Microsoft.AspNetCore.HttpOverrides;
 using Newtonsoft.Json.Converters;
 using Serilog;
 
@@ -12,6 +13,12 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
     options.SerializerSettings.Converters.Add(new StringEnumConverter());
 }); ;
+
+builder.Services.Configure<ForwardedHeadersOptions>(options => {
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+}); 
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 // builder.Services.AddOpenApi();
@@ -45,6 +52,8 @@ if (app.Environment.IsDevelopment())
     // app.MapOpenApi();
 }
 
+app.UseForwardedHeaders();
+
 app.UseServices();
 
 app.UseRouting();
@@ -61,8 +70,6 @@ app.UseCors(x => x
 );
 
 app.UseStaticFiles();
-
-app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

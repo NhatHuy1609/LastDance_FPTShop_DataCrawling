@@ -13,7 +13,6 @@ async def run_all_ingestions():
     # Danh sách các đối tượng nạp dữ liệu
     ingestion_tasks = [
         LaptopIngestion(
-        LaptopIngestion(
             api_url=DATABASE_API_URL,
             landing_zone_path=LANDING_ZONES_PATH,
             batch_size=BATCH_SIZE
