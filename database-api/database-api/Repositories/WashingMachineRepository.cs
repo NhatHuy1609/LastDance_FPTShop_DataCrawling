@@ -30,14 +30,13 @@ public class WashingMachineRepository : IWashingMachineRepository
         {
             query = query.Where(l => l.Id > cursorId);
         }
-        
+    
+        query = query.Where(w => w.Price != 0);
         var washingMachines = await query.OrderBy(w => w.Id)
             .Take(limit + 1)
             .ToListAsync();
 
         bool hasMore = washingMachines.Count > limit;
-            
-       
         if (hasMore)
         {
             washingMachines.RemoveAt(washingMachines.Count - 1);
