@@ -32,7 +32,7 @@ namespace database_api.Controllers
         {
             var laptops = await _laptopRepository.GetLaptopsAsync(limit, cursor);
             var laptopDtos = _mapper.Map<PaginatedResult<LaptopDto>>(laptops);
-            
+
             return Ok(laptopDtos);
         }
 
