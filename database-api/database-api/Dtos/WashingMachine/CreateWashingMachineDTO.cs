@@ -19,9 +19,4 @@ public class CreateWashingMachineDto
         
     [Range(0, double.MaxValue)]
     public double PriceDiscount { get; set; }
-        
-    [Required]
-    public string Category { get; set; }
-        
-    public bool? IsAvailable { get; set; }
 }

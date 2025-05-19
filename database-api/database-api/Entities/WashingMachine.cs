@@ -8,6 +8,4 @@ public class WashingMachine
     public string ImageUrl { get; set; } = string.Empty;
     public double? Price { get; set; }
     public double? PriceDiscount { get; set; }
-    public string Category { get; set; } = string.Empty;
-    public string? isAvailable { get; set; }
 }
