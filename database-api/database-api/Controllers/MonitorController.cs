@@ -1,7 +1,9 @@
 using database_api.Dtos.Monitor;
 using database_api.Interfaces;
 using database_api.Mappers;
+using database_api.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace database_api.Controllers
 {
@@ -19,8 +21,19 @@ namespace database_api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllMonitors([FromQuery] QueryParams queryParams)
         {
-            var monitors = await _monitorRepository.GetAllMonitors(queryParams);
-            return Ok(monitors);
+            var monitorResult = await _monitorRepository.GetAllMonitors(queryParams);
+            
+            // Convert monitors to DTOs while preserving pagination data
+            var result = new PagedResult<MonitorDto>
+            {
+                Items = monitorResult.Items.Select(m => m.ToDto()),
+                TotalItems = monitorResult.TotalItems,
+                PageNumber = monitorResult.PageNumber,
+                PageSize = monitorResult.PageSize,
+                TotalPages = monitorResult.TotalPages
+            };
+            
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
