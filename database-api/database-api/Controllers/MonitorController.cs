@@ -1,9 +1,8 @@
 using database_api.Dtos.Monitor;
 using database_api.Interfaces;
-using database_api.Mappers;
 using database_api.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+using AutoMapper;
 
 namespace database_api.Controllers
 {
@@ -12,48 +11,58 @@ namespace database_api.Controllers
     public class MonitorController : ControllerBase
     {
         private readonly IMonitorRepository _monitorRepository;
+        private readonly IMapper _mapper;
 
-        public MonitorController(IMonitorRepository monitorRepository)
+        public MonitorController(IMonitorRepository monitorRepository, IMapper mapper)
         {
             _monitorRepository = monitorRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllMonitors([FromQuery] QueryParams queryParams)
+        public async Task<ActionResult<PaginatedResult<MonitorDto>>> GetMonitorsAsync(
+            [FromQuery] int limit = 10,
+            [FromQuery] string? cursor = null,
+            [FromQuery] string? name = null,
+            [FromQuery] string? category = null,
+            [FromQuery] double? minPrice = null,
+            [FromQuery] double? maxPrice = null,
+            [FromQuery] string? sortBy = null,
+            [FromQuery] bool isDescending = false)
         {
-            var monitorResult = await _monitorRepository.GetAllMonitors(queryParams);
-            
-            // Convert monitors to DTOs while preserving pagination data
-            var result = new PagedResult<MonitorDto>
-            {
-                Items = monitorResult.Items.Select(m => m.ToDto()),
-                TotalItems = monitorResult.TotalItems,
-                PageNumber = monitorResult.PageNumber,
-                PageSize = monitorResult.PageSize,
-                TotalPages = monitorResult.TotalPages
-            };
-            
-            return Ok(result);
+            var monitors = await _monitorRepository.GetMonitorsAsync(limit, cursor, name, category, minPrice, maxPrice, sortBy, isDescending);
+            var monitorDtos = _mapper.Map<PaginatedResult<MonitorDto>>(monitors);
+            return Ok(monitorDtos);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetMonitorById(int id)
+        public async Task<ActionResult<MonitorDto>> GetMonitorById(int id)
         {
-            var monitor = await _monitorRepository.GetMonitorById(id);
-            return Ok(monitor.ToDto());
+            try
+            {
+                var monitor = await _monitorRepository.GetMonitorById(id);
+                var monitorDto = _mapper.Map<MonitorDto>(monitor);
+                return Ok(monitorDto);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateMonitor(CreateMonitorRequest request)
+        public async Task<ActionResult<MonitorDto>> CreateMonitor(CreateMonitorRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var monitor = request.ToEntityFromCreateMonitorRequest(); // Convert CreateMonitorRequest to Monitor entity
+            var monitor = _mapper.Map<Entities.Monitor>(request);
             var createdMonitor = await _monitorRepository.CreateMonitor(monitor);
-            return CreatedAtAction(nameof(GetMonitorById), new { id = createdMonitor.Id }, createdMonitor.ToDto());
+            var monitorDto = _mapper.Map<MonitorDto>(createdMonitor);
+
+            return CreatedAtAction(nameof(GetMonitorById), new { id = monitorDto.Id }, monitorDto);
         }
     }
 }

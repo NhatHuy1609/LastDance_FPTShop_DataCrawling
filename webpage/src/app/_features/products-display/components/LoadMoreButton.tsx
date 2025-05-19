@@ -1,5 +1,4 @@
 import React from 'react'
-import { useLaptopsContext } from '../laptops/context'
 import { cn } from '@/lib/utils'
 
 type Props = {
@@ -14,7 +13,7 @@ function LoadMoreButton({ loadMoreFn, disable = false }: Props) {
       className={cn(
         'cursor-pointer rounded-full bg-black px-4 py-2 text-sm text-white hover:opacity-80',
         {
-          'opacity-60': disable
+          'cursor-not-allowed opacity-60': disable
         }
       )}
       onClick={loadMoreFn}

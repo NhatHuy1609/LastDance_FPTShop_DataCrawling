@@ -1,0 +1,24 @@
+import { z } from 'zod'
+
+export const MonitorDtoSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  url: z.string(),
+  imageUrl: z.string(),
+  price: z.number(),
+  priceDiscount: z.number(),
+  category: z.string(),
+  isAvailable: z.string()
+})
+
+// Query models
+export const MonitorsQueryDtoSchema = z.object({
+  limit: z.number().optional(),
+  cursor: z.string().optional(),
+  name: z.string().optional(),
+  category: z.string().optional(),
+  minPrice: z.number().optional(),
+  maxPrice: z.number().optional(),
+  sortBy: z.string().optional(),
+  isDescending: z.boolean().optional()
+})
