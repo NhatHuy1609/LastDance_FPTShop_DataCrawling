@@ -13,8 +13,8 @@ namespace database_api.Mappers
                 ImageUrl = request.ImageUrl,
                 Price = request.Price,
                 PriceDiscount = request.PriceDiscount,
-                Category = "Monitor",
-                isAvailable = "true"
+                Category = request.Category,
+                isAvailable = request.IsAvailable.ToString() ?? "true"
             };
         }
 
@@ -28,6 +28,8 @@ namespace database_api.Mappers
                 ImageUrl = entity.ImageUrl,
                 Price = entity.Price ?? 0,
                 PriceDiscount = entity.PriceDiscount ?? 0,
+                Category = entity.Category,
+                isAvailable = entity.isAvailable
             };
         }
     }
