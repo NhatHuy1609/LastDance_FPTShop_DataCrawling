@@ -1,11 +1,11 @@
-import { laptopApis } from "@/services/api/laptop";
+import { televisionApis } from "@/services/api/television";
 import { infiniteQueryOptions } from "@tanstack/react-query";
-import { mapToPaginatedLaptops } from "./laptop.lib";
-import { LaptopsQuery, PaginatedLaptops } from "./laptop.types";
+import { mapToPaginatedTelevisions } from "./television.lib";
+import { TelevisionsQuery, PaginatedTelevisions } from "./television.types";
 
-export const LAPTOPS_ROOT_QUERY_KEY = ['laptops'];
+export const TELEVISIONS_ROOT_QUERY_KEY = ['televisions'];
 
-export const laptopsQueryOptions = (query?: LaptopsQuery) => {
+export const televisionsQueryOptions = (query?: TelevisionsQuery) => {
   const {
     limit = 10,
     cursor = null,
@@ -16,11 +16,11 @@ export const laptopsQueryOptions = (query?: LaptopsQuery) => {
     isDescending
   } = query || {}
 
-  return infiniteQueryOptions<PaginatedLaptops>({
-    queryKey: [...LAPTOPS_ROOT_QUERY_KEY, `limit-${limit}`],
+  return infiniteQueryOptions<PaginatedTelevisions>({
+    queryKey: [...TELEVISIONS_ROOT_QUERY_KEY, `limit-${limit}`],
     queryFn: async ({ pageParam, signal }) => {
-      const response = await laptopApis.getLaptops({ 
-        signal ,
+      const response = await televisionApis.getTelevisions({ 
+        signal,
         params: {
           limit,
           cursor: (pageParam as string) || undefined,
@@ -31,7 +31,8 @@ export const laptopsQueryOptions = (query?: LaptopsQuery) => {
           isDescending
         }
       })
-      return mapToPaginatedLaptops(response.data)
+
+      return mapToPaginatedTelevisions(response.data)
     },
     initialPageParam: cursor ?? null,
     getNextPageParam: (data) => {

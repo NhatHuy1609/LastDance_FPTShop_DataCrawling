@@ -1,4 +1,4 @@
-export type Laptop = {
+export type Television = {
   id: number
   name: string
   url: string
@@ -7,13 +7,13 @@ export type Laptop = {
   priceDiscount: number
 }
 
-export type PaginatedLaptops = {
-  laptops: Laptop[],
+export type PaginatedTelevisions = {
+  televisions: Television[],
   nextCursor?: string
   hasMore: boolean
 }
 
-export type LaptopsQuery = {
+export type TelevisionsQuery = {
   limit?: number
   cursor?: string
   name?: string

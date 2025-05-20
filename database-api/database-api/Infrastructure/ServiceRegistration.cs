@@ -23,6 +23,7 @@ namespace database_api.Infrastructure
             services.AddScoped<IGamingGearRepository, GamingGearRepository>();
             services.AddScoped<IMonitorRepository, MonitorRepository>();
             services.AddScoped<IWashingMachineRepository, WashingMachineRepository>();
+            services.AddScoped<ITelevisionRepository, TelevisionRepository>();
 
             services.AddDbContext<ApplicationDbContext>((sp, options) =>
             {

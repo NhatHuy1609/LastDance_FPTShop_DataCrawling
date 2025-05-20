@@ -1,28 +1,29 @@
-import { useLaptops } from '@/hooks/apis/laptop/useLaptops'
+import { useTelevisions } from '@/hooks/apis/television/useTelevisions'
 import React, { useCallback, useEffect, useState } from 'react'
 import ProductsList from '../components/ProductsList'
-import { LaptopsContext } from './context'
-import { Laptop, LaptopsQuery } from '@/entities/laptop/laptop.types'
+import { Television, TelevisionsQuery } from '@/entities/television/television.types'
 import LoadMoreButton from '../components/LoadMoreButton'
-import LaptopsFilter from './LaptopsFilter'
+import TelevisionsFilter from './TelevisionsFilter'
+import { TelevisionsContext } from './context'
 
-function LaptopsDisplay() {
-  const [queryParams, setQueryParams] = useState<LaptopsQuery>({
+function TelevisionsDisplay() {
+  const [queryParams, setQueryParams] = useState<TelevisionsQuery>({
     limit: 10
   })
 
-  const { fetchNextPage, hasNextPage, isFetchingNextPage, data, refetch } = useLaptops(queryParams)
-  const [laptops, setLaptops] = useState<Laptop[]>([])
+  const { fetchNextPage, hasNextPage, isFetchingNextPage, data, refetch } =
+    useTelevisions(queryParams)
+  const [televisions, setTelevisions] = useState<Television[]>([])
 
-  // Update laptops state when data from API changes
+  // Update televisions state when data from API changes
   useEffect(() => {
     if (data) {
-      const allLaptops = data.pages.flatMap((page) => page.laptops)
-      setLaptops(allLaptops)
+      const allTelevisions = data.pages.flatMap((page) => page.televisions)
+      setTelevisions(allTelevisions)
     }
   }, [data])
 
-  const filterLaptopsByName = useCallback(
+  const filterTelevisionsByName = useCallback(
     (name: string) => {
       setQueryParams((prev) => ({ ...prev, name: name || undefined, cursor: undefined }))
       refetch()
@@ -30,7 +31,7 @@ function LaptopsDisplay() {
     [refetch]
   )
 
-  const filterLaptopsByPrice = useCallback(
+  const filterTelevisionsByPrice = useCallback(
     (minPrice?: number, maxPrice?: number) => {
       setQueryParams((prev) => ({
         ...prev,
@@ -43,7 +44,7 @@ function LaptopsDisplay() {
     [refetch]
   )
 
-  const sortLaptops = useCallback(
+  const sortTelevisions = useCallback(
     (sortBy: string, isDescending: boolean) => {
       setQueryParams((prev) => ({
         ...prev,
@@ -56,16 +57,16 @@ function LaptopsDisplay() {
     [refetch]
   )
 
-  const handleLoadMoreLaptops = () => {
+  const handleLoadMoreTelevisions = () => {
     fetchNextPage()
   }
 
   return (
-    <LaptopsContext
+    <TelevisionsContext
       value={{
-        sortLaptops,
-        filterLaptopsByPrice,
-        filterLaptopsByName,
+        sortTelevisions,
+        filterTelevisionsByPrice,
+        filterTelevisionsByName,
         fetchNextPage,
         hasNextPage,
         isFetchingNextPage
@@ -73,17 +74,17 @@ function LaptopsDisplay() {
     >
       <div className='relative flex w-full gap-4 p-4'>
         <div className='w-1/4 rounded-md border border-black/60'>
-          <LaptopsFilter />
+          <TelevisionsFilter />
         </div>
         <div className='w-full'>
-          <ProductsList data={laptops} />
+          <ProductsList data={televisions} />
           <div className='mt-6 flex w-full justify-center'>
-            <LoadMoreButton loadMoreFn={handleLoadMoreLaptops} disable={!hasNextPage} />
+            <LoadMoreButton loadMoreFn={handleLoadMoreTelevisions} disable={!hasNextPage} />
           </div>
         </div>
       </div>
-    </LaptopsContext>
+    </TelevisionsContext>
   )
 }
 
-export default LaptopsDisplay
+export default TelevisionsDisplay

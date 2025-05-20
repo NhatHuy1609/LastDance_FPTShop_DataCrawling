@@ -1,4 +1,4 @@
-using database_api.Data;
+﻿using database_api.Data;
 using database_api.Entities;
 using database_api.Interfaces;
 using database_api.Models;
@@ -6,28 +6,28 @@ using Microsoft.EntityFrameworkCore;
 
 namespace database_api.Repositories
 {
-    public class LaptopRepository : ILaptopRepository
+    public class TelevisionRepository : ITelevisionRepository
     {
         private readonly ApplicationDbContext _dbContext;
 
-        public LaptopRepository(ApplicationDbContext dbContext)
+        public TelevisionRepository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public async Task<Laptop> AddLaptopAsync(Laptop laptop)
+        public async Task<Television> AddTelevisionAsync(Television laptop)
         {
-            await _dbContext.Laptops.AddAsync(laptop);
+            await _dbContext.Televisions.AddAsync(laptop);
             await _dbContext.SaveChangesAsync();
             return laptop;
         }
 
-        public async Task<Laptop?> GetLaptopByIdAsync(int id)
+        public async Task<Television?> GetTelevisionByIdAsync(int id)
         {
-            return await _dbContext.Laptops.FindAsync(id);
+            return await _dbContext.Televisions.FindAsync(id);
         }
 
-        public async Task<PaginatedResult<Laptop>> GetLaptopsAsync(
+        public async Task<PaginatedResult<Television>> GetTelevisionsAsync(
             int limit,
             string? cursor,
             string? name = null,
@@ -37,13 +37,13 @@ namespace database_api.Repositories
             bool isDescending = false)
         {
             int cursorId = 0;
-            
+
             if (!string.IsNullOrEmpty(cursor))
             {
                 int.TryParse(cursor, out cursorId);
             }
 
-            var query = _dbContext.Laptops.AsQueryable();
+            var query = _dbContext.Televisions.AsQueryable();
 
             // Apply cursor pagination
             if (cursorId > 0)
@@ -52,7 +52,7 @@ namespace database_api.Repositories
             }
 
             // Apply sorting
-            IOrderedQueryable<Laptop> orderedQuery;
+            IOrderedQueryable<Television> orderedQuery;
 
             switch (sortBy?.ToLower())
             {
@@ -84,7 +84,7 @@ namespace database_api.Repositories
                                     .ToListAsync();
 
             bool hasMore = laptops.Count > limit;
-            
+
             // Remove the extra item if we fetched one more than requested
             if (hasMore)
             {
@@ -97,7 +97,7 @@ namespace database_api.Repositories
                 nextCursor = laptops.Last().Id.ToString();
             }
 
-            return new PaginatedResult<Laptop>
+            return new PaginatedResult<Television>
             {
                 Items = laptops,
                 NextCursor = nextCursor,
@@ -105,4 +105,4 @@ namespace database_api.Repositories
             };
         }
     }
-} 
+}

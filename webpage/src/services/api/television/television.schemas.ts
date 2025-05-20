@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const LaptopDtoSchema = z.object({
+export const TelevisionDtoSchema = z.object({
   id: z.number(),
   name: z.string(),
   url: z.string(),
@@ -10,7 +10,7 @@ export const LaptopDtoSchema = z.object({
 })
 
 // Query models
-export const LaptopsQueryDtoSchema = z.object({
+export const TelevisionQueryDtoSchema = z.object({
   limit: z.number().optional(),
   cursor: z.string().optional(),
   name: z.string().optional(),

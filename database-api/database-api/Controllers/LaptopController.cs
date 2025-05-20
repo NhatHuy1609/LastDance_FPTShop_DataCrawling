@@ -28,9 +28,14 @@ namespace database_api.Controllers
         [HttpGet]
         public async Task<ActionResult<PaginatedResult<LaptopDto>>> GetLaptopsAsync(
             [FromQuery] int limit = 10,
-            [FromQuery] string? cursor = null)
+            [FromQuery] string? cursor = null,
+            [FromQuery] string? name = null,
+            [FromQuery] double? minPrice = null,
+            [FromQuery] double? maxPrice = null,
+            [FromQuery] string? sortBy = null,
+            [FromQuery] bool isDescending = false)
         {
-            var laptops = await _laptopRepository.GetLaptopsAsync(limit, cursor);
+            var laptops = await _laptopRepository.GetLaptopsAsync(limit, cursor, name, minPrice, maxPrice, sortBy, isDescending); ;
             var laptopDtos = _mapper.Map<PaginatedResult<LaptopDto>>(laptops);
 
             return Ok(laptopDtos);

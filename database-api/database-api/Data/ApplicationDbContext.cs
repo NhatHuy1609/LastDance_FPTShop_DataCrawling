@@ -16,6 +16,7 @@ namespace database_api.Data
         public DbSet<Entities.Monitor> Monitors { get; set; }
         
         public DbSet<WashingMachine> WashingMachines { get; set; }
+        public DbSet<Television> Televisions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

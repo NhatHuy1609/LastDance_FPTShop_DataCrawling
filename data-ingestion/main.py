@@ -1,6 +1,7 @@
 import asyncio
 from config import LANDING_ZONES_PATH, DATABASE_API_URL, BATCH_SIZE
 from ingestion.laptop_ingestion import LaptopIngestion
+from ingestion.television_ingestion import TelevisionIngestion
 from ingestion.gaming_gears_ingestion import GamingGearsIngestion
 from ingestion.monitor_ingestion import MonitorIngestion
 from ingestion.washingmachine_ingestion import WashingmachineIngestion
@@ -13,32 +14,31 @@ async def run_all_ingestions():
     """Chạy tất cả các tiến trình nạp dữ liệu cùng lúc"""
     # Danh sách các đối tượng nạp dữ liệu
     ingestion_tasks = [
-        # LaptopIngestion(
-        #     api_url=DATABASE_API_URL,
-        #     landing_zone_path=LANDING_ZONES_PATH,
-        #     batch_size=BATCH_SIZE
-        # ),
-    
+        LaptopIngestion(
+            api_url=DATABASE_API_URL,
+            landing_zone_path=LANDING_ZONES_PATH,
+            batch_size=BATCH_SIZE
+        ),
         WashingmachineIngestion(
             api_url=DATABASE_API_URL,
             landing_zone_path=LANDING_ZONES_PATH,
             batch_size=BATCH_SIZE
         ),
-        # GamingGearsIngestion(
-        #     api_url=DATABASE_API_URL,
-        #     landing_zone_path=LANDING_ZONES_PATH,
-        #     batch_size=BATCH_SIZE
-        # ),
-#         MonitorIngestion(
-#             api_url=DATABASE_API_URL,
-#             landing_zone_path=LANDING_ZONES_PATH,
-#             batch_size=BATCH_SIZE
-#         ),
-        # GamingGearsIngestion(
-        #     api_url=DATABASE_API_URL,
-        #     landing_zone_path=LANDING_ZONES_PATH,
-        #     batch_size=BATCH_SIZE
-        # )
+        GamingGearsIngestion(
+            api_url=DATABASE_API_URL,
+            landing_zone_path=LANDING_ZONES_PATH,
+            batch_size=BATCH_SIZE
+        ),
+        MonitorIngestion(
+            api_url=DATABASE_API_URL,
+            landing_zone_path=LANDING_ZONES_PATH,
+            batch_size=BATCH_SIZE
+        ),
+        TelevisionIngestion(
+            api_url=DATABASE_API_URL,
+            landing_zone_path=LANDING_ZONES_PATH,
+            batch_size=BATCH_SIZE
+        )
         # Thêm các đối tượng nạp dữ liệu khác ở đây
         # PhoneIngestion(...),
         # TabletIngestion(...),

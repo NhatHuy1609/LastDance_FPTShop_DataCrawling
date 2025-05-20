@@ -3,6 +3,6 @@ export const ROUTE_PATHS = {
   monitor: '/monitor',
   gamingGear: '/gaming-gear',
   washingMachine: '/washingMachine',
-  television: '/tv'
+  television: '/television'
 }
 
